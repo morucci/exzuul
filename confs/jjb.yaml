@@ -1,0 +1,33 @@
+- defaults:
+    name: zuul
+    description: |
+      <p>Job triggered by zuul</p>
+
+    project-type: freestyle
+    concurrent: true
+
+    scm:
+     - zuul-git
+
+- scm:
+    name: zuul-git
+    scm:
+     - git:
+        url: '$ZUUL_URL/$ZUUL_PROJECT'
+        branches:
+         - '$ZUUL_COMMIT'
+        refspec: '$ZUUL_REF'
+
+- job-template:
+    name: '{name}-unit-tests'
+    defaults: zuul
+    builders:
+      - shell: ./run_tests.sh
+    triggers:
+      - zuul
+    node: master
+
+- project:
+     name: testproject
+     jobs:
+       - '{name}-unit-tests'
