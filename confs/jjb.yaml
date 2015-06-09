@@ -1,33 +1,21 @@
 - defaults:
-    name: zuul
-    description: |
-      <p>Job triggered by zuul</p>
-
+    name: global
     project-type: freestyle
     concurrent: true
 
-    scm:
-     - zuul-git
-
-- scm:
-    name: zuul-git
-    scm:
-     - git:
-        url: '$ZUUL_URL/$ZUUL_PROJECT'
-        branches:
-         - '$ZUUL_COMMIT'
-        refspec: '$ZUUL_REF'
-
-- job-template:
-    name: '{name}-unit-tests'
-    defaults: zuul
-    builders:
-      - shell: ./run_tests.sh
-    triggers:
-      - zuul
-    node: master
+- job:
+     name: testproject-unit-tests
+     defaults: global
+     builders:
+       - shell: |
+           zuul-cloner http://ci.localdomain:8080 $ZUUL_PROJECT
+           cd $ZUUL_PROJECT
+           ./run_tests.sh
 
 - project:
      name: testproject
+     node: master
+     triggers:
+       - zuul
      jobs:
-       - '{name}-unit-tests'
+       - testproject-unit-tests

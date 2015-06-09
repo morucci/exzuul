@@ -11,8 +11,6 @@ pipelines:
       gerrit:
         - event: patchset-created
         - event: comment-added
-          comment: (?i)retrigger
-        - event: comment-added
           comment: (?i)recheck
     start:
       gerrit:
@@ -58,8 +56,6 @@ pipelines:
     failure:
       gerrit:
         verified: -2
-    window-floor: 20
-    window-increase-factor: 2
 
   - name: post
     description: This pipeline runs jobs that operate after each change is merged.

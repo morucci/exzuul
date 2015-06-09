@@ -93,8 +93,8 @@ $ sudo docker build -t exzuul .
 Start the container
 
 ```
-$ sudo docker run -d -h ci.localdomain exzuul
-$ CID=$(sudo docker ps | grep gezuul | cut -f1 -d' ')
+$ sudo docker run -d -h ci.localdomain -v /dev/urandom:/dev/random -p 80:80 -p 29418:29418 -p 8080:8080 -p 8081:8081 exzuul
+$ CID=$(sudo docker ps | grep exzuul | cut -f1 -d' ')
 ```
 
 Get a live shell inside a running container
@@ -123,10 +123,9 @@ Configure a first project to be validated via Zuul
 Here is the first steps to perform to have a project hosted on Gerrit
 and unit test are triggered by Zuul.
 
-* Create a user with your name on Gerrit. Don't forget to add your public
-  key in the form.
+* Login as the admin user. Add your public key in the admin user settings page.
 * Create a Job for "testproject". The container already have a valid JJB
-  onfiguration with a working job definition for "testproject".
+  configuration with a working job definition for "testproject".
 
 ```
 $ sudo docker exec -i -t $CID /bin/bash
@@ -135,11 +134,10 @@ $ sudo docker exec -i -t $CID /bin/bash
 ```
 
 * The job must be shown in the jobs list of Jenkins
-* As admin - create a project called "testproject" in Gerrit
+* As admin - create a project called "testproject" in Gerrit (check "create inital empty commit)
 * Clone the new project on your local computer
 
 ```
-$ sudo pip install git-review
 $ git clone http://ci.localdomain:8080/testproject
 $ cd testproject
 $ git checkout -b "first_commit"
@@ -153,13 +151,17 @@ $ cat > run_tests.sh << EOF
 #!/bin/bash
 exit 0
 EOF
-$ git review -s # use your Gerrit login and be sure to have the public key listed by ssh-add -l
+$ chmod +x run_tests.sh
+$ sudo pip install git-review
+$ ssh-keygen -f "$HOME/.ssh/known_hosts" -R [ci.localdomain]:29418
+$ git review -s # use "admin" as login and be sure to have the public key listed by ssh-add -l
+$ git config --add gitreview.username "admin"
 $ git add run_tests.sh .gitreview
 $ git commit -m "first commit"
 $ git review
 ```
 
-* In the Gerrit web UI you should see your new patch on "testproject" and a check
+* In the Gerrit web UI you should see your new patch on "testproject" and a green check
   sign added by Zuul in the "Verified" label.
 
 If you succeed to have your patch validated by Zuul that means the platform is

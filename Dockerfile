@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER "Fabien Boucher" <fabien.boucher@enovance.com>
 
 RUN yum -y install epel-release
-RUN yum -y install java-1.6.0-openjdk python git supervisor python-pip gcc python-devel postfix httpd rsyslog
+RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel postfix httpd rsyslog
 
 ENV GERRIT_HOME /opt/gerrit
 ENV JENKINS_HOME /var/lib/jenkins
@@ -26,12 +26,6 @@ ENV JENKINS_REPO http://pkg.jenkins-ci.org/redhat/jenkins.repo
 ENV JENKINS_REPO_KEY http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 ENV JENKINS_REPO_PLUGINS https://updates.jenkins-ci.org/download/plugins
 ENV JENKINS_GEARMAN_PLUGIN ${JENKINS_REPO_PLUGINS}/gearman-plugin/0.1.1/gearman-plugin.hpi
-ENV JENKINS_SCM_API_PLUGIN ${JENKINS_REPO_PLUGINS}/scm-api/0.2/scm-api.hpi
-ENV JENKINS_SSH_AGENT_PLUGIN ${JENKINS_REPO_PLUGINS}/ssh-agent/1.4.1/ssh-agent.hpi
-ENV JENKINS_GIT_CLIENT_PLUGIN ${JENKINS_REPO_PLUGINS}/git-client/1.9.0/git-client.hpi
-ENV JENKINS_PARAM_TRIGGER_PLUGIN ${JENKINS_REPO_PLUGINS}/parameterized-trigger/2.24/parameterized-trigger.hpi
-ENV JENKINS_MULTI_SCM_PLUGIN ${JENKINS_REPO_PLUGINS}/multiple-scms/0.3/multiple-scms.hpi
-ENV JENKINS_GIT_PLUGIN ${JENKINS_REPO_PLUGINS}/git/2.2.1/git.hpi
 
 RUN mkdir -p $SITE_PATH
 RUN mkdir $SITE_PATH/lib
@@ -50,12 +44,8 @@ RUN yum -y install jenkins-${JENKINS_VERSION}
 
 RUN mkdir -p $JENKINS_HOME/plugins
 RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/gearman-plugin.hpi $JENKINS_GEARMAN_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/scm-api.hpi $JENKINS_SCM_API_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/ssh-agent.hpi $JENKINS_SSH_AGENT_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/git-client.hpi $JENKINS_GIT_CLIENT_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/parameterized-trigger.hpi $JENKINS_PARAM_TRIGGER_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/multiple-scms.hpi $JENKINS_MULTI_SCM_PLUGIN
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/git.hpi $JENKINS_GIT_PLUGIN
+
+RUN pip install nose flake8 mock
 
 RUN mkdir /etc/zuul
 RUN mkdir /var/log/zuul
