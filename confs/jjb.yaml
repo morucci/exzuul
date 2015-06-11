@@ -15,7 +15,5 @@
 - project:
      name: testproject
      node: master
-     triggers:
-       - zuul
      jobs:
        - testproject-unit-tests
