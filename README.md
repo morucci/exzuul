@@ -60,8 +60,7 @@ Zuul status page can be reached at http://ci.localdomain
 Jenkins
 .......
 
-Only a Jenkins master is configured here. All needed plugins
-to interact will Zuul are pre-installed in the container.
+Only a Jenkins master is configured here.
 Gearman plugin is pre-configured to connect on Zuul master.
 
 A default user "jenkins/password" is pre-configured in
@@ -110,7 +109,7 @@ $ sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CID
 ```
 
 You should access the container using ci.localdomain hostname instead
-of the IP. Please add "theip ci.localdomain" in /etc/hosts.
+of the IP. Please add "the ip ci.localdomain" in /etc/hosts.
 
 
 WARNING: If the container is stopped and restart all local work and

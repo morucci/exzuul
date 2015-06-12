@@ -59,6 +59,8 @@ RUN rm -Rf /tmp/zuul
 
 RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/bootstrap/css/bootstrap.min.css https://raw.githubusercontent.com/twbs/bootstrap/v3.3.4/dist/css/bootstrap.min.css
 RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery.min.js https://raw.githubusercontent.com/jquery/jquery/2.1.4/dist/jquery.min.js
+RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery.graphite.js http://status.openstack.org/jquery-graphite.js
+RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery-visibility.js http://status.openstack.org/jquery-visibility.min.js
 
 RUN mkdir /etc/jenkins_jobs
 RUN mkdir /etc/jenkins_jobs/jobs
@@ -91,7 +93,6 @@ ADD ./confs/ssh_wrapper.sh /tmp/ssh_wrapper.sh
 ADD ./confs/gerrit-post.sh /tmp/gerrit-post.sh
 RUN chmod +x /tmp/ssh_wrapper.sh /tmp/gerrit-post.sh
 ADD ./confs/project.config /tmp/project.config
-ADD ./confs/rules.pl /tmp/rules.pl
 
 ADD ./supervisord.conf /etc/supervisord.conf
 ADD ./start.sh /start.sh

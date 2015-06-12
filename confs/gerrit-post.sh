@@ -19,8 +19,7 @@ git remote add origin ssh://$ADMINUSER@localhost:29418/All-Projects
 GIT_SSH=/tmp/ssh_wrapper.sh git fetch origin refs/meta/config:refs/remotes/origin/meta/config
 git checkout meta/config
 cp /tmp/project.config .
-cp /tmp/rules.pl .
-git add project.config rules.pl
+git add project.config
 git commit -a -m"Provide the default config" || true
 GIT_SSH=/tmp/ssh_wrapper.sh git push origin meta/config:meta/config
 cd -

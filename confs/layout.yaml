@@ -31,9 +31,8 @@ pipelines:
       current-patchset: True
       approval:
         - verified: [1, 2]
-          username: jenkins
+          username: zuul
         - code-review: 2
-        - workflow: 1
     trigger:
       gerrit:
         - event: comment-added
@@ -41,11 +40,8 @@ pipelines:
             - code-review: 2
         - event: comment-added
           approval:
-            - workflow: 1
-        - event: comment-added
-          approval:
             - verified: 1
-          username: jenkins
+          username: zuul
     start:
       gerrit:
         verified: 0
@@ -57,40 +53,10 @@ pipelines:
       gerrit:
         verified: -2
 
-  - name: post
-    description: This pipeline runs jobs that operate after each change is merged.
-    manager: IndependentPipelineManager
-    precedence: low
-    trigger:
-      gerrit:
-        - event: ref-updated
-          ref: ^(?!(devnull|refs/.*)).*$
-
-  - name: periodic
-    description: Jobs in this queue are triggered daily.
-    manager: IndependentPipelineManager
-    precedence: low
-    trigger:
-      timer:
-        - time: '0 0 * * *'
-    failure:
-      smtp:
-        from: jenkins@ci.localdomain
-        to: dev-robot@ci.localdomain
-        subject: 'Stable check of {change.project} failed'
-
-  - name: tag
-    description: This pipeline runs jobs in response to any tag event.
-    manager: IndependentPipelineManager
-    source: gerrit
-    precedence: high
-    trigger:
-      gerrit:
-        - event: ref-updated
-          ref: ^refs/tags/.*$
-
 
 projects:
   - name: testproject
     check:
+      - testproject-unit-tests
+    gate:
       - testproject-unit-tests
