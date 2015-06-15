@@ -45,7 +45,7 @@ RUN yum -y install jenkins-${JENKINS_VERSION}
 RUN mkdir -p $JENKINS_HOME/plugins
 RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o $JENKINS_HOME/plugins/gearman-plugin.hpi $JENKINS_GEARMAN_PLUGIN
 
-RUN pip install nose flake8 mock
+RUN pip install virtualenv nose flake8 mock
 
 RUN mkdir /etc/zuul
 RUN mkdir /var/log/zuul
