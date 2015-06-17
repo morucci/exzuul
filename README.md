@@ -73,12 +73,6 @@ locally to update jobs.
 
 Jenkins can be reached at http://ci.localdomain:8081/jenkins
 
-Postfix
-.......
-
-Postfix is pre-configured inside the container for convenience and all
-services are configured to use the local MX to send notifications.
-
 
 Build and start
 ---------------

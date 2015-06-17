@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER "Fabien Boucher" <fabien.boucher@enovance.com>
 
 RUN yum -y install epel-release
-RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel postfix httpd rsyslog
+RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel httpd rsyslog
 
 ENV GERRIT_HOME /opt/gerrit
 ENV JENKINS_HOME /var/lib/jenkins
@@ -65,11 +65,6 @@ RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/l
 RUN mkdir /etc/jenkins_jobs
 RUN mkdir /etc/jenkins_jobs/jobs
 RUN pip install jenkins-job-builder
-
-ADD ./confs/main.cf /etc/postfix/main.cf
-ADD ./confs/start_postfix.sh /opt/start_postfix.sh
-RUN chmod +x /opt/start_postfix.sh
-RUN chmod g-x /etc/postfix/main.cf
 
 ADD ./confs/gerrit.config $SITE_PATH/etc/gerrit.config
 
