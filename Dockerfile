@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER "Fabien Boucher" <fabien.boucher@enovance.com>
 
 RUN yum -y install epel-release
-RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel httpd rsyslog
+RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel httpd rsyslog unzip
 
 ENV GERRIT_HOME /opt/gerrit
 ENV JENKINS_HOME /var/lib/jenkins
@@ -51,16 +51,14 @@ RUN mkdir /etc/zuul
 RUN mkdir /var/log/zuul
 RUN mkdir /var/lib/zuul
 RUN mkdir /var/www/zuul
-RUN mkdir -p /var/www/zuul/lib/bootstrap/css
 RUN git clone https://github.com/openstack-infra/zuul /tmp/zuul
 RUN pip install /tmp/zuul
 RUN cp -Rf /tmp/zuul/etc/status/public_html/* /var/www/zuul/
 RUN rm -Rf /tmp/zuul
 
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/bootstrap/css/bootstrap.min.css https://raw.githubusercontent.com/twbs/bootstrap/v3.3.4/dist/css/bootstrap.min.css
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery.min.js https://raw.githubusercontent.com/jquery/jquery/2.1.4/dist/jquery.min.js
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery.graphite.js http://status.openstack.org/jquery-graphite.js
-RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/lib/jquery-visibility.js http://status.openstack.org/jquery-visibility.min.js
+RUN curl --silent --show-error --retry 12 --retry-delay 10 -L -o /var/www/zuul/fetch.sh https://raw.githubusercontent.com/openstack-infra/zuul/master/etc/status/fetch-dependencies.sh
+RUN sed -i "s|public_html/||" /var/www/zuul/fetch.sh
+RUN bash /var/www/zuul/fetch.sh
 
 RUN mkdir /etc/jenkins_jobs
 RUN mkdir /etc/jenkins_jobs/jobs
