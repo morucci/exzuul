@@ -23,8 +23,7 @@ add such a line in your laptop /etc/hosts:
 
 <container_ip> ci.localdomain
 
-Gerrit
-``````
+### Gerrit
 
 Gerrit is configured with "DEVELOPMENT_BECOME_ANY_ACCOUNT" setting so
 no need to deal with any external authentication system. Also a local H2
@@ -37,8 +36,7 @@ Two users are created by default:
 
 Gerrit can be reached at http://ci.localdomain:8080
 
-Zuul
-````
+### Zuul
 
 Zuul is pre-configured to listen to events from the Gerrit event stream
 and will connect to Gerrit at container startup. Zuul's merger
@@ -49,8 +47,7 @@ are already configured.
 
 Zuul status page can be reached at http://ci.localdomain
 
-Jenkins
-```````
+### Jenkins
 
 Only a Jenkins master is configured here.
 The Jenkins Gearman plugin is pre-configured to connect on the Zuul gearman
