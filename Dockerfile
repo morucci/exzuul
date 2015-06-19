@@ -70,6 +70,7 @@ RUN mkdir -p $JENKINS_HOME/plugins/users/jenkins/
 ADD ./confs/gearman_config.xml $JENKINS_HOME/hudson.plugins.gearman.GearmanPluginConfig.xml
 ADD ./confs/jenkins-config.xml $JENKINS_HOME/config.xml
 ADD ./confs/jenkins-user.xml $JENKINS_HOME/users/jenkins/config.xml
+ADD ./confs/jenkins.model.JenkinsLocationConfiguration.xml $JENKINS_HOME/jenkins.model.JenkinsLocationConfiguration.xml
 RUN chown -R jenkins:jenkins $JENKINS_HOME
 
 ADD ./confs/zuul.conf /etc/zuul/zuul.conf
