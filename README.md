@@ -15,6 +15,20 @@ This docker container is based on a centos7 image and contains:
 - Jenkins
 - Jenkins-job-builder
 
+Use Fedora 21 Cloud as Docker host
+----------------------------------
+The easiest way to start with Docker is to use a Fedora 21 Cloud image. Start
+the image and execute the following commands to install Docker and other
+requirements:
+
+```
+$ sudo yum install https://get.docker.com/rpm/1.7.0/fedora-21/RPMS/x86_64/docker-engine-1.7.0-1.fc21.x86_64.rpm
+$ sudo service docker start
+$ sudo docker run hello-world
+$ sudo yum install git python-pip
+```
+
+
 Services
 --------
 
@@ -104,9 +118,15 @@ Configure a first project to be validated via Zuul
 Here is the first steps to perform in order to have a project hosted on Gerrit
 and a job triggered by Zuul.
 
-* Login as the admin user. Add your public key in the admin user settings page.
-* Create a Job for "testproject". The container already have a valid JJB
-  configuration with a working job definition for "testproject".
+* Login to Gerrit as the admin user. Add your public key in the admin user
+  settings page. If you don't have a key yet, create one:
+```
+$ ssh-keygen
+$ cat ~/.ssh/id_rsa.pub
+```
+* Create a Job in Jenkins for "testproject" using the following command. The
+  container already has a valid JJB configuration with a working job definition
+  for "testproject".
 
 ```
 $ sudo docker exec -i -t $CID /bin/bash
@@ -114,7 +134,7 @@ $ sudo docker exec -i -t $CID /bin/bash
 # jenkins-jobs --conf /etc/jenkins_jobs/jenkins_jobs.ini update /etc/jenkins_jobs/jobs
 ```
 
-- The job must be shown in the jobs list of Jenkins
+- The job "testproject-unit-tests" must be shown in the Jenkin job list
 - As admin - create a project called "testproject" in Gerrit (check "create inital empty commit")
 - Clone the new project on your local computer and submit the as a review
 
@@ -134,6 +154,7 @@ exit 0
 EOF
 $ chmod +x run_tests.sh
 $ sudo pip install git-review
+$ touch "$HOME/.ssh/known_hosts"
 $ ssh-keygen -f "$HOME/.ssh/known_hosts" -R [ci.localdomain]:29418
 $ git review -s # use "admin" as login and be sure to have the public key listed by ssh-add -l
 $ git config --add gitreview.username "admin"
