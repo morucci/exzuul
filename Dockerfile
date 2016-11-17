@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER "Fabien Boucher" <fabien.boucher@enovance.com>
 
 RUN yum -y install epel-release
-RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel httpd rsyslog unzip
+RUN yum -y install vim java-1.6.0-openjdk python git supervisor python-pip gcc python-devel httpd rsyslog unzip dejavu-sans-fonts
 
 ENV GERRIT_HOME /opt/gerrit
 ENV JENKINS_HOME /var/lib/jenkins
